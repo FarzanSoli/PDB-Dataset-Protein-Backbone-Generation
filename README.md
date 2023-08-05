@@ -1,5 +1,5 @@
 # PDB Dataset-Protein Backbone Generation
- This repository contains the codes to retrieve 3-D coordinates of the protein backbone from [PDB database][1]. Additionally, The [pre-existing dataset][2] contains alpha-carbon coordinates. 
+ This repository contains the codes to retrieve 3-D coordinates of the protein backbone from [PDB database][1]. Additionally, You can find pre-processed dataset containing the [alpha-carbon coordinates.][2]. 
 
 
 [1]: https://files.wwpdb.org/pub/pdb/data/biounit/PDB/divided/
