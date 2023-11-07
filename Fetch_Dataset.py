@@ -75,7 +75,7 @@ main_url = 'https://files.wwpdb.org/pub/pdb/data/biounit/PDB/divided/'
 LINKS = Download_PDB(main_url).Download(directory)
 Extract_dataset = Functions(directory).gz_extract()
 
-directory = os.getcwd() + '/Dataset/PDB5'
+directory = os.getcwd() + '/Dataset/PDB'
 """ ########## Extract_Coordinates ########## """
 def C_a_dist_mat(directory):
     extensions = [".pdb"+str(i) for i in range(1,10)]
@@ -125,7 +125,7 @@ def C_a_dist_mat(directory):
 
 # ================================== #
 Proteins = C_a_dist_mat(directory)
-f = open("PDB5.pkl","wb")
+f = open("PDB.pkl","wb")
 pickle.dump(Proteins,f)
 f.close()
 
