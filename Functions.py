@@ -146,13 +146,10 @@ class Functions():
     #                 Standardize               #
     # ========================================= #
     def standardize(self, coordinates):
-        Dist = np.sqrt((coordinates[:,0]**2)+(coordinates[:,1]**2)+(coordinates[:,2]**2))
-        Mean_Dist = np.mean(Dist)
-        STD_Dist = np.std(Dist)
-        Standard_Dist = (Dist - Mean_Dist)/(STD_Dist)
-        standard_coordinate = np.transpose(np.array([coordinates[:,0]/Standard_Dist,
-                                                       coordinates[:,1]/Standard_Dist,
-                                                       coordinates[:,2]/Standard_Dist]))
+        x_standard = coordinates[:,0] - coordinates[:,0].mean()
+        y_standard = coordinates[:,1] - coordinates[:,1].mean()
+        z_standard = coordinates[:,2] - coordinates[:,2].mean()
+        standard_coordinate = np.transpose(np.array([x_standard, y_standard, z_standard]))
         return standard_coordinate
     # ========================================= #
     #                 Normalize               #
@@ -164,4 +161,61 @@ class Functions():
                                                        coordinates[:,1]/Dist,
                                                        coordinates[:,2]/Dist]))
         return Normalized_coordinate
+
+
+
+
+
+def standardize(coordinates):
+    x_standard = coordinates[:,0] - coordinates[:,0].mean()
+    y_standard = coordinates[:,1] - coordinates[:,1].mean()
+    z_standard = coordinates[:,2] - coordinates[:,2].mean()
+    standard_coordinate = np.transpose(np.array([x_standard, y_standard, z_standard]))
+    return standard_coordinate
+
+
+def standardize_(coordinates):
+    Dist = np.sqrt((coordinates[:,0]**2)+(coordinates[:,1]**2)+(coordinates[:,2]**2))
+    Mean_Dist = np.mean(Dist)
+    STD_Dist = np.std(Dist)
+    Standard_Dist = (Dist - Mean_Dist)/(STD_Dist)
+    standard_coordinate = np.transpose(np.array([coordinates[:,0]/Standard_Dist,
+                                                   coordinates[:,1]/Standard_Dist,
+                                                   coordinates[:,2]/Standard_Dist]))
+    return standard_coordinate
+
+
+
+coordinates = np.array([[1,2,3],[1,4,6],[1,6,9], [1,9,12]])
+
+standard_coordinate = standardize(coordinates)
+standard_coordinate_ = standardize_(coordinates)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
