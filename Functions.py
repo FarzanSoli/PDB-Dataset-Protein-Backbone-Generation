@@ -156,8 +156,9 @@ class Functions():
     # ========================================= #
     def Normalize(self, coordinates):
         # distance from origin (0,0,0)
-        Dist = np.sqrt((coordinates[:,0]**2)+(coordinates[:,1]**2)+(coordinates[:,2]**2))
-        Normalized_coordinate = np.transpose(np.array([coordinates[:,0]/Dist,
-                                                       coordinates[:,1]/Dist,
-                                                       coordinates[:,2]/Dist]))
+        x_norm = (coordinates[:,0] - np.min(coordinates[:,0]))/(np.max(coordinates[:,0]) - np.min(coordinates[:,0]))
+        y_norm = (coordinates[:,1] - np.min(coordinates[:,1]))/(np.max(coordinates[:,1]) - np.min(coordinates[:,1]))
+        z_norm = (coordinates[:,2] - np.min(coordinates[:,2]))/(np.max(coordinates[:,2]) - np.min(coordinates[:,2]))
+        Normalized_coordinate = np.transpose(np.array([x_norm, y_norm, z_norm]))
+
         return Normalized_coordinate
