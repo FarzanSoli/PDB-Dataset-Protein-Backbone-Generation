@@ -152,7 +152,6 @@ class Functions():
     #                 Normalize               #
     # ========================================= #
     def Normalize(self, coordinates):
-        # distance from origin (0,0,0)
         x_norm = (coordinates[:,0] - np.min(coordinates[:,0]))/(np.max(coordinates[:,0]) - np.min(coordinates[:,0]))
         y_norm = (coordinates[:,1] - np.min(coordinates[:,1]))/(np.max(coordinates[:,1]) - np.min(coordinates[:,1]))
         z_norm = (coordinates[:,2] - np.min(coordinates[:,2]))/(np.max(coordinates[:,2]) - np.min(coordinates[:,2]))
