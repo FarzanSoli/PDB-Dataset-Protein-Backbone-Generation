@@ -68,9 +68,6 @@ class Functions():
                   # Copy the contents of source file to destination file
                   shutil.copyfileobj(f_in, f_out)
               os.remove(gz_name) # delete zipped file
-    
-    # extracted = gz_extract(directory)
-
     # ========================================= #
     #               Encoding Amio acids         #
     # ========================================= #
