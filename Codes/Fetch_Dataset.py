@@ -1,3 +1,7 @@
+"""
+Author: Farzan Soleymani
+Date: Nov 20 2023
+"""
 """ ########## Processing C-alpha files ########## """
 import wget
 import pickle
@@ -75,14 +79,13 @@ main_url = 'https://files.wwpdb.org/pub/pdb/data/biounit/PDB/divided/'
 LINKS = Download_PDB(main_url).Download(directory)
 Extract_dataset = Functions(directory).gz_extract()
 """ ########## Extract_Coordinates ########## """
-def C_a_dist_mat(directory):
+def Extract_Coordinates(directory):
     extensions = [".pdb"+str(i) for i in range(1,10)]
     os.chdir(directory)
-    C_a = {}
     chain = {}
-    AA_sq = {}
     protein = {}
-    Distance = {}
+    AA_Chain = {}
+    Ca_Chain = {}
     for item in os.listdir(directory):
         for extension in extensions:
             if item.endswith(extension):
@@ -96,33 +99,30 @@ def C_a_dist_mat(directory):
                     ca = {}
                     c_a = {}
                     seq = {}
-                    dist = {}
                     for ch in chain[id_]:
                         ca[ch] = protein[id_]['ATOM'].loc[
                             protein[id_]['ATOM']['name'] == 'CA',
                             ['chain','x','y','z','resname']].loc[
                             protein[id_]['ATOM'].loc[protein[id_]['ATOM']['name'] == 'CA',
                             ['chain','x','y','z','resname']]['chain']==ch].drop('chain', axis=1)
-                        if ca[ch].shape[0] <= 5 or ca[ch].shape[0] >= 512:
+                        # Filter sequence with length bigger than 5 and less than 1024
+                        if ca[ch].shape[0] <= 3:
                             continue
                         else:
                             seq[ch] = list(ca[ch]['resname'])
                             c_a[ch] = ca[ch].drop('resname', axis=1).to_numpy()
-                            dist[ch] = distance.cdist(c_a[ch], c_a[ch],'euclidean')
                     # ---------------------------------------------------------- #   
-                    if len(c_a) != 0:
-                        C_a[id_] = c_a
-                        AA_sq[id_] = seq
-                        Distance[id_] = dist
+                        ID = id_+'_'+ch
+                        Ca_Chain[ID] = c_a[ch]
+                        AA_Chain[ID] = seq[ch]
     # -------------------------------------------------------------------------- #   
     Info = dict()
-    # Info['Coordinate'] = C_a
-    Info['AA_sq'] = AA_sq
-    Info['Distance'] = Distance
+    Info['Coordinate'] = Ca_Chain
+    Info['AA_sq'] = AA_Chain
     return Info
 
 # ================================== #
-Proteins = C_a_dist_mat(directory)
+Proteins = Extract_Coordinates(directory)
 f = open("PDB.pkl","wb")
 pickle.dump(Proteins,f)
 f.close()
