@@ -1,0 +1,70 @@
+"""
+Author: Farzan Soleymani
+Date: Dec 01-2023
+"""
+
+""" ########## Processing C-alpha files ########## """
+import pickle
+import pdbreader
+import pandas as pd 
+import os, sys, gemmi, json
+
+""" ########## Extract_Coordinates ########## """
+def Extract_Coordinates(directory):
+    extensions = [".pdb"+str(i) for i in range(1,10)]
+    os.chdir(directory)
+    C_a = {}
+    chain = {}
+    AA_sq = {}
+    protein = {}
+    AA_Chain = {}
+    Ca_Chain = {}
+    for item in os.listdir(directory):
+        for extension in extensions:
+            if item.endswith(extension):
+                # Parse and get basic information
+                id_ = item.replace(extension, "")
+                protein[id_] = pdbreader.read_pdb(item)
+                if 'ATOM' not in protein[id_].keys():
+                    continue
+                else:
+                    chain[id_] = set(list(protein[id_]['ATOM']['chain']))
+                    ca = {}
+                    c_a = {}
+                    seq = {}
+                    for ch in chain[id_]:
+                        ca[ch] = protein[id_]['ATOM'].loc[
+                            protein[id_]['ATOM']['name'] == 'CA',
+                            ['chain','x','y','z','resname']].loc[
+                            protein[id_]['ATOM'].loc[protein[id_]['ATOM']['name'] == 'CA',
+                            ['chain','x','y','z','resname']]['chain']==ch].drop('chain', axis=1)
+                        # Filter sequence with length bigger than 5 and less than 1024
+                        if ca[ch].shape[0] <= 3:
+                            continue
+                        else:
+                            seq[ch] = list(ca[ch]['resname'])
+                            c_a[ch] = ca[ch].drop('resname', axis=1).to_numpy()
+                    # ---------------------------------------------------------- #   
+                        ID = id_+'_'+ch
+                        Ca_Chain[ID] = c_a[ch]
+                        AA_Chain[ID] = seq[ch]
+                    # ---------------------------------------------------------- #   
+                    if len(c_a) != 0:
+                        C_a[id_] = c_a
+                        AA_sq[id_] = seq
+    # -------------------------------------------------------------------------- #   
+    Info = dict()
+    Info['Coordinate'] = C_a
+    Info['AA_sq'] = AA_sq
+    return Info
+
+""" ########## Save the Dataset ########## """
+
+if __name__ == "__main__":
+    print('Saving the coordinate of alpha carbons!')
+    directory = os.getcwd() + '/Dataset/TEST'
+    Proteins = Extract_Coordinates(directory)
+    with open("PDB_seq.pkl","wb") as file:
+        pickle.dump(Proteins,file)
+        file.close()
+

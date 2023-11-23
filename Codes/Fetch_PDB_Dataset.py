@@ -71,59 +71,8 @@ class Download_PDB:
                 else:
                     wget.download(main_url+url+code, directory)
     # ------------------------------------------
-main_url = 'https://files.wwpdb.org/pub/pdb/data/biounit/PDB/divided/'
-LINKS = Download_PDB(main_url).Download(directory)
-Extract_dataset = Functions(directory).gz_extract()
-""" ########## Extract_Coordinates ########## """
-def C_a_dist_mat(directory):
-    extensions = [".pdb"+str(i) for i in range(1,10)]
-    os.chdir(directory)
-    C_a = {}
-    chain = {}
-    AA_sq = {}
-    protein = {}
-    Distance = {}
-    for item in os.listdir(directory):
-        for extension in extensions:
-            if item.endswith(extension):
-                # Parse and get basic information
-                id_ = item.replace(extension, "")
-                protein[id_] = pdbreader.read_pdb(item)
-                if 'ATOM' not in protein[id_].keys():
-                    continue
-                else:
-                    chain[id_] = set(list(protein[id_]['ATOM']['chain']))
-                    ca = {}
-                    c_a = {}
-                    seq = {}
-                    dist = {}
-                    for ch in chain[id_]:
-                        ca[ch] = protein[id_]['ATOM'].loc[
-                            protein[id_]['ATOM']['name'] == 'CA',
-                            ['chain','x','y','z','resname']].loc[
-                            protein[id_]['ATOM'].loc[protein[id_]['ATOM']['name'] == 'CA',
-                            ['chain','x','y','z','resname']]['chain']==ch].drop('chain', axis=1)
-                        if ca[ch].shape[0] <= 5 or ca[ch].shape[0] >= 512:
-                            continue
-                        else:
-                            seq[ch] = list(ca[ch]['resname'])
-                            c_a[ch] = ca[ch].drop('resname', axis=1).to_numpy()
-                            dist[ch] = distance.cdist(c_a[ch], c_a[ch],'euclidean')
-                    # ---------------------------------------------------------- #   
-                    if len(c_a) != 0:
-                        C_a[id_] = c_a
-                        AA_sq[id_] = seq
-                        Distance[id_] = dist
-    # -------------------------------------------------------------------------- #   
-    Info = dict()
-    # Info['Coordinate'] = C_a
-    Info['AA_sq'] = AA_sq
-    Info['Distance'] = Distance
-    return Info
-
-# ================================== #
-Proteins = C_a_dist_mat(directory)
-f = open("PDB.pkl","wb")
-pickle.dump(Proteins,f)
-f.close()
+if __name__ == "__main__":
+    main_url = 'https://files.wwpdb.org/pub/pdb/data/biounit/PDB/divided/'
+    LINKS = Download_PDB(main_url).Download(directory)
+    Extract_dataset = Functions(directory).gz_extract()
 
