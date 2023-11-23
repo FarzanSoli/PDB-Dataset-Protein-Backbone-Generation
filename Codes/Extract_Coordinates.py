@@ -59,9 +59,7 @@ if __name__ == "__main__":
     print('Saving the coordinate of alpha carbons!')
     directory = os.getcwd() + '/Dataset/PDB_alpha_C'
     Proteins = Extract_Coordinates(directory)
-# =============================================================================
-#     with open("PDB_Backbone.pkl","wb") as file:
-#         pickle.dump(Proteins,file)
-#         file.close()
-# =============================================================================
+    with open("PDB_Backbone.pkl","wb") as file:
+        pickle.dump(Proteins,file)
+        file.close()
 
