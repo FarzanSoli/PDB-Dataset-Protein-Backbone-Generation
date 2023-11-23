@@ -3,7 +3,6 @@ Author: Farzan Soleymani
 Date: Dec 01-2023
 """
 
-""" ########## Processing C-alpha files ########## """
 import os
 import pickle
 import pdbreader
@@ -54,7 +53,6 @@ def Extract_Coordinates(directory):
     return Info
 
 """ ########## Save the Dataset ########## """
-
 if __name__ == "__main__":
     print('Saving the coordinate of alpha carbons!')
     directory = os.getcwd() + '/Dataset/PDB_alpha_C'
@@ -62,4 +60,3 @@ if __name__ == "__main__":
     with open("PDB_Backbone.pkl","wb") as file:
         pickle.dump(Proteins,file)
         file.close()
-
