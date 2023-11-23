@@ -8,6 +8,7 @@ import os
 import pickle
 import pdbreader
 import pandas as pd 
+from tqdm import tqdm
 
 """ ########## Extract_Coordinates ########## """
 def Extract_Coordinates(directory):
@@ -17,7 +18,7 @@ def Extract_Coordinates(directory):
     protein = {}
     AA_Chain = {}
     Ca_Chain = {}
-    for item in os.listdir(directory):
+    for item in tqdm(os.listdir(directory)):
         for extension in extensions:
             if item.endswith(extension):
                 # Parse and get basic information
@@ -58,7 +59,9 @@ if __name__ == "__main__":
     print('Saving the coordinate of alpha carbons!')
     directory = os.getcwd() + '/Dataset/PDB_alpha_C'
     Proteins = Extract_Coordinates(directory)
-    with open("PDB_Backbone.pkl","wb") as file:
-        pickle.dump(Proteins,file)
-        file.close()
+# =============================================================================
+#     with open("PDB_Backbone.pkl","wb") as file:
+#         pickle.dump(Proteins,file)
+#         file.close()
+# =============================================================================
 
