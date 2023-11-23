@@ -12,47 +12,51 @@ encode_CT = Functions("/Dataset/").encode_CT
 standardize = Functions("/Dataset/").standardize
 # ========================================= #
 class Protein_Backbone():
-    def __init__(self, directory):
+    def __init__(self, Pad_Length, Directory):
         super().__init__()
-        self.directory = directory
-    # ========================================= #
-    #                 Distance Matrix           #
-    # ========================================= #
-    def Distance_Matrix(self, Pad_Length, Directory, files):
+        self.directory = Directory
+        self.Pad_Length = Pad_Length
+        self.padding = Functions("/Dataset/").padding
+        self.files = os.listdir(os.getcwd() + self.directory)
+    def Distance_Matrix(self):
+        Motif = {}
+        Scaffold = {}
+        Dist_motif = {}
         Coordinates = {}
-        Protein_backbone = {}
-        Dist_Protein_backbone = {}
-        for file in files: 
-            coordinate = pd.read_excel(Directory +'/'+file, 
-                            names=['X_coordinate', 'Y_coordinate', 'Z_coordinate']).to_numpy()
-                # -------------------------------------------- #
-            if coordinate.shape[0] > Pad_Length:
-                cut_coordinate = coordinate[:Pad_Length, :]
-                # cut_coordinate = self.standardize(cut_coordinate)
-                
+        Dist_scaffold = {}
+        for file in self.files: 
+            coordinate = pd.read_excel(self.directory+'/'+file, names=['X_coordinate', 'Y_coordinate', 'Z_coordinate']).to_numpy()
+            # --------------------------------- #
+            if coordinate.shape[0] > self.Pad_Length:
+                cut_coordinate = coordinate[:self.Pad_Length, :]
                 Coordinates[file.replace('.xlsx','')] = cut_coordinate
-                # -------------------------------------------- #
-                Protein_backbone[file.replace('.xlsx','')] = cut_coordinate
-                Dist_Protein_backbone[file.replace('.xlsx','')] = distance.cdist(
-                                padding(Pad_Length, Protein_backbone[file.replace('.xlsx','')]), 
-                                padding(Pad_Length, Protein_backbone[file.replace('.xlsx','')]), 
-                                'euclidean')
-                # -------------------------------------------- #
+                Motif[file.replace('.xlsx','')] = cut_coordinate[:int(cut_coordinate.shape[0]*0.3),:]
+                Dist_motif[file.replace('.xlsx','')] = distance.cdist(self.padding(int(Motif[file.replace('.xlsx','')].shape[0])+1,
+                                                                                       Motif[file.replace('.xlsx','')]),
+                                                                      self.padding(int(Motif[file.replace('.xlsx','')].shape[0])+1, 
+                                                                                       Motif[file.replace('.xlsx','')]),
+                                                                         'euclidean')
+                Scaffold[file.replace('.xlsx','')] = cut_coordinate[Motif[file.replace('.xlsx','')].shape[0]:, :]
+                Dist_scaffold[file.replace('.xlsx','')] = distance.cdist(self.padding(self.Pad_Length, Scaffold[file.replace('.xlsx','')]), 
+                                                                         self.padding(self.Pad_Length, Scaffold[file.replace('.xlsx','')]), 
+                                                                         'euclidean')
+            # --------------------------------- #
             else:
-                coordinates_ = padding(Pad_Length, coordinate)
-                # coordinates_ = self.standardize(coordinates_)                
-                Coordinates[file.replace('.xlsx','')] = coordinates_
-                # -------------------------------------------- #
-                Protein_backbone[file.replace('.xlsx','')] = Coordinates[file.replace('.xlsx','')][:,:]
-                Dist_Protein_backbone[file.replace('.xlsx','')] = distance.cdist(
-                                padding(Pad_Length, Protein_backbone[file.replace('.xlsx','')]), 
-                                padding(Pad_Length, Protein_backbone[file.replace('.xlsx','')]), 
-                                'euclidean')
-                
-        with open('Dataset/Distance_Protein_Backbone.pkl', 'wb') as file:
-            pickle.dump(Dist_Protein_backbone, file)
-        with open('Dataset/Protein_Backbone.pkl', 'wb') as file:
-            pickle.dump(Protein_backbone, file)
+                Coordinates[file.replace('.xlsx','')] = self.padding(self.Pad_Length, coordinate)
+                Motif[file.replace('.xlsx','')] = Coordinates[file.replace('.xlsx','')][:int(Coordinates[file.replace('.xlsx','')].shape[0]*0.3),:]
+                Dist_motif[file.replace('.xlsx','')] = distance.cdist(self.padding(int(Motif[file.replace('.xlsx','')].shape[0])+1,
+                                                                                       Motif[file.replace('.xlsx','')]),
+                                                                      self.padding(int(Motif[file.replace('.xlsx','')].shape[0])+1, 
+                                                                                       Motif[file.replace('.xlsx','')]),
+                                                                      'euclidean')
+                Scaffold[file.replace('.xlsx','')] = Coordinates[file.replace('.xlsx','')][Motif[file.replace('.xlsx','')].shape[0]:, :]
+                Dist_scaffold[file.replace('.xlsx','')] = distance.cdist(self.padding(self.Pad_Length, Scaffold[file.replace('.xlsx','')]), 
+                                                                         self.padding(self.Pad_Length, Scaffold[file.replace('.xlsx','')]), 
+                                                                         'euclidean')
+        with open('Dataset/Distance_Scaffold.pkl', 'wb') as file:
+            pickle.dump(Dist_scaffold, file)
+        with open('Dataset/Distance_Motif.pkl', 'wb') as file:
+                pickle.dump(Dist_motif, file)
     # ========================================= #
     #         Normalize Distance Matrix         #
     # ========================================= #
@@ -85,7 +89,7 @@ class Protein_Backbone():
 Pad_Length = 128
 data_dir = os.getcwd() +'/Dataset/PDB_alpha_C'
 files = os.listdir(data_dir)
-Load_Data = Protein_Backbone(data_dir).Distance_Matrix(Pad_Length, data_dir, files)
+Load_Data = Protein_Backbone(Pad_Length, data_dir).Distance_Matrix()
 
 # ------------ Proteins ------------ #
 with open('Dataset/Distance_Protein_Backbone.pkl', 'rb') as file:
