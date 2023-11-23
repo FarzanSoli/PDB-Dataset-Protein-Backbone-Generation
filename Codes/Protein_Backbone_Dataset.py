@@ -1,3 +1,7 @@
+"""
+Author: Farzan Soleymani
+Date: Nov 20-2023
+"""
 """ ########## Processing Protein backbone coordinates and distance matrices ########## """
 import os
 import torch
