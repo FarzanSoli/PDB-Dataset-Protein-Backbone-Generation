@@ -11,7 +11,7 @@ padding = Functions("/Dataset/").padding
 encode_CT = Functions("/Dataset/").encode_CT
 standardize = Functions("/Dataset/").standardize
 # ========================================= #
-class Protein_Backbone():
+class C_a_Distance_Matrix():
     def __init__(self, Pad_Length, Directory):
         super().__init__()
         self.directory = Directory
@@ -89,16 +89,16 @@ class Protein_Backbone():
 Pad_Length = 128
 data_dir = os.getcwd() +'/Dataset/PDB_alpha_C'
 files = os.listdir(data_dir)
-Load_Data = Protein_Backbone(Pad_Length, data_dir).Distance_Matrix()
+Load_Data = C_a_Distance_Matrix(Pad_Length, data_dir).Distance_Matrix()
 
 # ------------ Proteins ------------ #
-with open('Dataset/Distance_Protein_Backbone.pkl', 'rb') as file:
+with open('Dataset/Distance_C_a_Distance_Matrix.pkl', 'rb') as file:
     Proteins = pickle.load(file)
     file.close()
 Proteins_PDB_ID = Proteins.keys()
 Proteins_dist = []
 for key, value in Proteins.items():
-    value_scaled = Protein_Backbone(data_dir).Dist_Norm(value)
+    value_scaled = C_a_Distance_Matrix(data_dir).Dist_Norm(value)
     Proteins_dist.append(torch.FloatTensor(value_scaled[None,:,:]))
 
 torch.save(Proteins_dist, 'Dataset/Proteins_Tensor.pt')
@@ -107,10 +107,10 @@ torch.save(list(Proteins.keys()), 'Dataset/Proteins_PDB_ID.pt')
 # ------------ Encoded Backbone ------------ #
 Pad_Length = 64
 Directory = 'Dataset/AA_Seq_main.csv'
-Encoded_Backbone_Seq = Protein_Backbone(Directory).Encoded_Backbone_Seq(Pad_Length, Directory)
+Encoded_Backbone_Seq = C_a_Distance_Matrix(Directory).Encoded_Backbone_Seq(Pad_Length, Directory)
 
 # ------------ Padding encoded backbone ------------ #
 file = open('Dataset/Encoded_Backbone_Seq_64.pkl', 'rb')
 Dataset = pickle.load(file)
 file.close()
-Padding_Protein_Backbone = Protein_Backbone(Directory).Padding_Protein_Backbone(Pad_Length, Dataset)
+Padding_Protein_Backbone = C_a_Distance_Matrix(Directory).Padding_Protein_Backbone(Pad_Length, Dataset)

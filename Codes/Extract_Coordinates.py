@@ -4,10 +4,10 @@ Date: Dec 01-2023
 """
 
 """ ########## Processing C-alpha files ########## """
+import os
 import pickle
 import pdbreader
 import pandas as pd 
-import os, sys, gemmi, json
 
 """ ########## Extract_Coordinates ########## """
 def Extract_Coordinates(directory):
@@ -48,8 +48,8 @@ def Extract_Coordinates(directory):
                         AA_Chain[ID] = seq[ch]
     # -------------------------------------------------------------------------- #   
     Info = dict()
-    Info['Coordinate'] = Ca_Chain
     Info['AA_sq'] = AA_Chain
+    Info['Coordinate'] = Ca_Chain
     return Info
 
 """ ########## Save the Dataset ########## """

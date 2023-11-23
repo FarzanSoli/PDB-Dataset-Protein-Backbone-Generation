@@ -1,16 +1,13 @@
 """ ########## Processing C-alpha files ########## """
+import os
 import wget
-import pickle
 import requests
-import numpy as np
 import pandas as pd 
 from lxml import etree
 from io import StringIO
-import os, sys, gemmi, json
 from Functions import Functions
-from scipy.spatial import distance
 # ========================================= #
-import pdbreader
+
 # ========================================= #
 
 directory = os.getcwd() + '\Dataset\PDB_alpha_C'
@@ -25,7 +22,8 @@ class Download_PDB:
 
         self.main_url = main_url
         self.Pop_list = ["/pub/pdb/data/biounit/PDB/divided/", 
-                    "https://www.wwpdb.org/ftp/pdb-ftp-sites", "?C=M;O=A","?C=S;O=A","?C=N;O=D"]
+                         "https://www.wwpdb.org/ftp/pdb-ftp-sites", 
+                         "?C=M;O=A","?C=S;O=A","?C=N;O=D"]
         self.Pop_dict = self.Pop_list[1:]
     # ------------------------------------------ #
     def getLinks(self, url):

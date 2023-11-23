@@ -1,17 +1,12 @@
 """ ########## Processing C-alpha files ########## """
-import math
-import wget
+import os
 import copy
 import torch
-import pickle
 import zipfile
 import numpy as np
 import pandas as pd 
 import gzip, shutil
-import os, sys, gemmi, json
 from AA_features import features
-from scipy.spatial import distance
-from sklearn.preprocessing import MinMaxScaler
 # ========================================= #
 class Functions():
     def __init__(self, directory):
