@@ -13,9 +13,7 @@ import os, sys, gemmi, json
 def Extract_Coordinates(directory):
     extensions = [".pdb"+str(i) for i in range(1,10)]
     os.chdir(directory)
-    C_a = {}
     chain = {}
-    AA_sq = {}
     protein = {}
     AA_Chain = {}
     Ca_Chain = {}
@@ -48,21 +46,17 @@ def Extract_Coordinates(directory):
                         ID = id_+'_'+ch
                         Ca_Chain[ID] = c_a[ch]
                         AA_Chain[ID] = seq[ch]
-                    # ---------------------------------------------------------- #   
-                    if len(c_a) != 0:
-                        C_a[id_] = c_a
-                        AA_sq[id_] = seq
     # -------------------------------------------------------------------------- #   
     Info = dict()
-    Info['Coordinate'] = C_a
-    Info['AA_sq'] = AA_sq
+    Info['Coordinate'] = Ca_Chain
+    Info['AA_sq'] = AA_Chain
     return Info
 
 """ ########## Save the Dataset ########## """
 
 if __name__ == "__main__":
     print('Saving the coordinate of alpha carbons!')
-    directory = os.getcwd() + '/Dataset/TEST'
+    directory = os.getcwd() + '/Dataset/PDB_alpha_C'
     Proteins = Extract_Coordinates(directory)
     with open("PDB_seq.pkl","wb") as file:
         pickle.dump(Proteins,file)
