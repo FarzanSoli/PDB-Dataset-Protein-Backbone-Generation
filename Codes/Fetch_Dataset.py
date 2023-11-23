@@ -1,6 +1,6 @@
 """
 Author: Farzan Soleymani
-Date: Nov 20 2023
+Date: Nov 20-2023
 """
 """ ########## Processing C-alpha files ########## """
 import wget
