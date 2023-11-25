@@ -13,7 +13,6 @@ from Functions import Functions
 # ========================================= #
 
 # ========================================= #
-
 directory = os.getcwd() + '\Dataset\PDB_alpha_C'
 if not os.path.exists(directory):
     os.mkdir(directory)

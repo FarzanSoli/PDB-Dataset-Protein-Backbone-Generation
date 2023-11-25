@@ -133,6 +133,7 @@ class C_a_Distance_Matrix():
 
 # ------------ calculate distance matrix ------------ #
 if __name__ == "__main__":
+    """ Save the distance matrix coordinate for a given backbone length. """
     Pad_Length = 128
     data_dir = os.getcwd() +'/Dataset/PDB_alpha_C'
     files = os.listdir(data_dir)
@@ -154,11 +155,13 @@ if __name__ == "__main__":
     torch.save(list(Proteins.keys()), 'Dataset/Proteins_PDB_ID.pt')
     
     # ------------ Encoded Backbone ------------ #
+    """ Save encoded protein backbone AA sequence. """
     Pad_Length = 64
     Directory = 'Dataset/AA_Seq_main.csv'
     Encoded_Backbone_Seq = C_a_Distance_Matrix(Directory).Encoded_Backbone_Seq(Pad_Length, Directory)
     
     # ------------ Padding encoded backbone ------------ #
+    """ Padding the encoded protein backbone AA sequence. """
     file = open('Dataset/Encoded_Backbone_Seq_64.pkl', 'rb')
     Dataset = pickle.load(file)
     file.close()

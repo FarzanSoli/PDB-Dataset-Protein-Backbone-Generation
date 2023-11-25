@@ -2,14 +2,13 @@
 Author: Farzan Soleymani
 Date: Dec 01-2023
 """
-
 import os
 import pickle
 import pdbreader
 import pandas as pd 
 from tqdm import tqdm
 
-""" ########## Extract_Coordinates
+""" ########## Extract_Coordinates:
         This code takes the directory where the PDB files are saved and 
         extracts alpha-carbon Coordinates and AA sequences. The output is a dictionary
         with "AA_sq" and "Coordinate" keys and it will be saved as pickle file.
