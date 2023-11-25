@@ -15,7 +15,10 @@ if not os.path.exists(directory):
     os.mkdir(directory)
     print('The new directory is created')
 
-""" ########## Download PDB files ########## """
+""" ########## Download PDB files 
+        A dataset is downloaded from PDB database which contains alpha-carbon coordinates and 
+        AA seqeuences among other featues. 
+    ########## """
 class Download_PDB:
     def __init__(self, main_url):
         super().__init__()

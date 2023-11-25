@@ -15,6 +15,9 @@ class Functions():
     # ========================================= #
     #                Fix AA sequenc             #
     # ========================================= #
+    """ 
+        Filling missing parts of the given sequence.
+    """
     def missing_seq(self, Dataset):
         df = Dataset.loc[Dataset['Sequence'].str.contains('X') & 
                            Dataset['Sequence'].str.startswith('X') &
@@ -35,6 +38,10 @@ class Functions():
     # ========================================= #
     #                   Padding                 #
     # ========================================= #
+    """ 
+        padding given sequence to a specific length.
+    """
+    
     def padding(self, pad_len, matrix):
         mat = np.zeros((pad_len, 3))
         mat[:matrix.shape[0], :matrix.shape[-1]] = matrix
@@ -42,6 +49,9 @@ class Functions():
     # ========================================= #
     #                  Unzip files              #
     # ========================================= #
+    """ 
+        Unzipping files in a given directory.
+    """
     def unzip(self, directory, file):
         # file = 'PDB alpha-C.zip'
         # directory = "/Dataset/"
@@ -51,6 +61,9 @@ class Functions():
     # ========================================= #
     #                 Extract gzip              #
     # ========================================= #
+    """ 
+        Extract Gzip files.
+    """
     def gz_extract(self):
         extension = ".gz"
         os.chdir(self.directory)
@@ -66,6 +79,9 @@ class Functions():
     # ========================================= #
     #               Encoding Amio acids         #
     # ========================================= #
+    """
+        Normalizing amino acid physicochemical features.
+    """
     def Normalize_AA(self):
         props = []
         for t in range(len(features().AA_prop_keys)):
@@ -90,6 +106,9 @@ class Functions():
     # ========================================= #
     #               Amino acid Encoding         #
     # ========================================= #
+    """
+        Encode amino acids based on their physicochemical features.
+    """
     def encode_CT(self, Pad_Length, dataframe):
         encoding = dict(zip(list(features().AA_dict), self.Normalize_AA()[1]))
         # ------------------------------------- #
@@ -109,6 +128,9 @@ class Functions():
     # ========================================= #
     #                 READ Fasta file           #
     # ========================================= #
+    """
+        Read ".fasta" file and extract dataset.
+    """
     def read_fasta(self, fasta_file, comment="#"):
         # with gzip.open(fasta_file,"r") as f:
         with open(fasta_file, "r") as file:
@@ -137,6 +159,9 @@ class Functions():
     # ========================================= #
     #                 Standardize               #
     # ========================================= #
+    """
+        Standardize given alpha-carbon coordinates. 
+    """
     def standardize(self, coordinates):
         x_standard = (coordinates[:,0] - coordinates[:,0].mean())/(np.std(coordinates[:,0]))
         y_standard = (coordinates[:,1] - coordinates[:,1].mean())/(np.std(coordinates[:,1]))
@@ -144,8 +169,11 @@ class Functions():
         standard_coordinate = np.transpose(np.array([x_standard, y_standard, z_standard]))
         return standard_coordinate
     # ========================================= #
-    #                 Normalize               #
+    #                 Normalize                 #
     # ========================================= #
+    """
+        Normalize given alpha-carbon coordinates. 
+    """
     def Normalize(self, coordinates):
         x_norm = (coordinates[:,0] - np.min(coordinates[:,0]))/(np.max(coordinates[:,0]) - np.min(coordinates[:,0]))
         y_norm = (coordinates[:,1] - np.min(coordinates[:,1]))/(np.max(coordinates[:,1]) - np.min(coordinates[:,1]))

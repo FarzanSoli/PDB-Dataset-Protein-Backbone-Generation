@@ -51,6 +51,8 @@ class features():
             beta.append(self.AAs[i]['beta'])
             alpha.append(self.AAs[i]['alpha'])
         # --------------------------------------------------------------------------------- #
+        """ The unknown amino acid features are calcualted as the median of standard amino acid 
+            features. """
         self.UNK = {'P_1':np.median(p_1),'P_2':np.median(p_2), 
                     'vol':np.median(vol)
                     ,'H_1':np.median(H_1),'H_2':np.median(H_2),

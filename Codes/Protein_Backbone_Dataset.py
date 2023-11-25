@@ -22,6 +22,9 @@ class C_a_Distance_Matrix():
     # ========================================= #
     #      Distance Matrix of CSV dataset       #
     # ========================================= #
+        """ 
+            Calculate distance matrix given a dataset saved as ".csv".
+        """
     def Distance_Matrix_CSV(self):
         Coordinates = {}
         Protein_backbone = {}
@@ -60,6 +63,9 @@ class C_a_Distance_Matrix():
     # ========================================= #
     #     Distance Matrix of Pickle dataset     #
     # ========================================= #
+        """ 
+            Calculate distance matrix given a dataset saved as ".pkl".
+        """
     def Distance_Matrix_PKL(self):
         Coordinates = {}
         Protein_backbone = {}
