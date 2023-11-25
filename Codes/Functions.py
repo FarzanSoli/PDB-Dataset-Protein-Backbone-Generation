@@ -1,4 +1,8 @@
-""" ########## Processing C-alpha files ########## """
+"""
+Author: Farzan Soleymani
+Date: Dec 01-2023
+"""
+""" ########## Essential functions ########## """
 import os
 import copy
 import torch
@@ -157,18 +161,6 @@ class Functions():
                 sequences.append(''.join(sequence))
             return list(zip(seq_id, sequences))
     # ========================================= #
-    #                 Standardize               #
-    # ========================================= #
-    """
-        Standardize given alpha-carbon coordinates. 
-    """
-    def standardize(self, coordinates):
-        x_standard = (coordinates[:,0] - coordinates[:,0].mean())/(np.std(coordinates[:,0]))
-        y_standard = (coordinates[:,1] - coordinates[:,1].mean())/(np.std(coordinates[:,1]))
-        z_standard = (coordinates[:,2] - coordinates[:,2].mean())/(np.std(coordinates[:,2]))
-        standard_coordinate = np.transpose(np.array([x_standard, y_standard, z_standard]))
-        return standard_coordinate
-    # ========================================= #
     #                 Normalize                 #
     # ========================================= #
     """
@@ -181,3 +173,22 @@ class Functions():
         Normalized_coordinate = np.transpose(np.array([x_norm, y_norm, z_norm]))
 
         return Normalized_coordinate
+    # ========================================= #
+    #                 Standardize               #
+    # ========================================= #
+    """
+        Standardize given alpha-carbon coordinates. 
+    """
+    def standardize(self, coordinates):
+        x_standard = (coordinates[:,0] - coordinates[:,0].mean())/(np.std(coordinates[:,0]))
+        y_standard = (coordinates[:,1] - coordinates[:,1].mean())/(np.std(coordinates[:,1]))
+        z_standard = (coordinates[:,2] - coordinates[:,2].mean())/(np.std(coordinates[:,2]))
+        standard_coordinate = np.transpose(np.array([x_standard, y_standard, z_standard]))
+        return standard_coordinate
+
+
+if __name__ == "__main__": 
+    padding = Functions("/Dataset/").padding
+    encode_CT = Functions("/Dataset/").encode_CT
+    Normalize = Functions("/Dataset/").Normalize
+    standardize = Functions("/Dataset/").standardize

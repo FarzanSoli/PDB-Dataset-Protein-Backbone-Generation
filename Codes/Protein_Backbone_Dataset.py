@@ -1,4 +1,8 @@
-""" ########## Processing Protein backbone coordinates and distance matrices ########## """
+"""
+Author: Farzan Soleymani
+Date: Dec 01-2023
+"""
+""" ########## Calculating Protein backbone distance matrices ########## """
 import os
 import torch
 import pickle
@@ -7,10 +11,6 @@ import pandas as pd
 from Functions import Functions
 from scipy.spatial import distance
 # ========================================= #
-padding = Functions("/Dataset/").padding
-encode_CT = Functions("/Dataset/").encode_CT
-standardize = Functions("/Dataset/").standardize
-# ========================================= #
 class C_a_Distance_Matrix():
     def __init__(self, Pad_Length, Directory, Pickle_file):
         super().__init__()
@@ -18,7 +18,9 @@ class C_a_Distance_Matrix():
         self.Pad_Length = Pad_Length
         self.padding = Functions("/Dataset/").padding
         self.Pickle_file = Pickle_file
+        self.encode_CT = Functions("/Dataset/").encode_CT
         self.files = os.listdir(os.getcwd() + self.directory)
+        self.standardize = Functions("/Dataset/").standardize
     # ========================================= #
     #      Distance Matrix of CSV dataset       #
     # ========================================= #
@@ -41,9 +43,9 @@ class C_a_Distance_Matrix():
                 # -------------------------------------------- #
                 Protein_backbone[file.replace('.xlsx','')] = cut_coordinate
                 Dist_Protein_backbone[file.replace('.xlsx','')] = distance.cdist(
-                                self.padding(self.Pad_Length, Protein_backbone[file.replace('.xlsx','')]), 
-                                self.padding(self.Pad_Length, Protein_backbone[file.replace('.xlsx','')]), 
-                                'euclidean')
+                            self.padding(self.Pad_Length, Protein_backbone[file.replace('.xlsx','')]), 
+                            self.padding(self.Pad_Length, Protein_backbone[file.replace('.xlsx','')]), 
+                            'euclidean')
                 # -------------------------------------------- #
             else:
                 coordinates_ = self.padding(self.Pad_Length, coordinate)
@@ -52,9 +54,9 @@ class C_a_Distance_Matrix():
                 # -------------------------------------------- #
                 Protein_backbone[file.replace('.xlsx','')] = Coordinates[file.replace('.xlsx','')][:,:]
                 Dist_Protein_backbone[file.replace('.xlsx','')] = distance.cdist(
-                                self.padding(self.Pad_Length, Protein_backbone[file.replace('.xlsx','')]), 
-                                self.padding(self.Pad_Length, Protein_backbone[file.replace('.xlsx','')]), 
-                                'euclidean')
+                            self.padding(self.Pad_Length, Protein_backbone[file.replace('.xlsx','')]), 
+                            self.padding(self.Pad_Length, Protein_backbone[file.replace('.xlsx','')]), 
+                            'euclidean')
                 
         with open('Dataset/Distance_Protein_Backbone.pkl', 'wb') as file:
             pickle.dump(Dist_Protein_backbone, file)
@@ -81,9 +83,9 @@ class C_a_Distance_Matrix():
             # -------------------------------------------- #
             Protein_backbone[file.replace('.xlsx','')] = cut_coordinate
             Dist_Protein_backbone[file.replace('.xlsx','')] = distance.cdist(
-                            self.padding(self.Pad_Length, Protein_backbone[file.replace('.xlsx','')]), 
-                            self.padding(self.Pad_Length, Protein_backbone[file.replace('.xlsx','')]), 
-                            'euclidean')
+                        self.padding(self.Pad_Length, Protein_backbone[file.replace('.xlsx','')]), 
+                        self.padding(self.Pad_Length, Protein_backbone[file.replace('.xlsx','')]), 
+                        'euclidean')
         # -------------------------------------------- #
         else:
             coordinates_ = self.padding(self.Pad_Length, coordinate)
@@ -92,9 +94,9 @@ class C_a_Distance_Matrix():
             # -------------------------------------------- #
             Protein_backbone[file.replace('.xlsx','')] = Coordinates[file.replace('.xlsx','')][:,:]
             Dist_Protein_backbone[file.replace('.xlsx','')] = distance.cdist(
-                            self.padding(self.Pad_Length, Protein_backbone[file.replace('.xlsx','')]), 
-                            self.padding(self.Pad_Length, Protein_backbone[file.replace('.xlsx','')]), 
-                            'euclidean')
+                        self.padding(self.Pad_Length, Protein_backbone[file.replace('.xlsx','')]), 
+                        self.padding(self.Pad_Length, Protein_backbone[file.replace('.xlsx','')]), 
+                        'euclidean')
             
         with open('Dataset/Distance_Protein_Backbone.pkl', 'wb') as file:
             pickle.dump(Dist_Protein_backbone, file)
@@ -104,14 +106,15 @@ class C_a_Distance_Matrix():
     #         Normalize Distance Matrix         #
     # ========================================= #
     def Dist_Norm(self, distance_matrix):
-        return (distance_matrix - np.min(distance_matrix))/(np.max(distance_matrix) - np.min(distance_matrix))
+        return (distance_matrix - np.min(distance_matrix))/(
+                    np.max(distance_matrix) - np.min(distance_matrix))
     # ========================================= #
     #         Encoded Protein Backbone Seq      #
     # ========================================= #
     def Encoded_Backbone_Seq(self, Pad_Length, Directory):
         # Directory = 'Dataset/AA_Seq_main.csv'
         AA_dataset = pd.read_csv(Directory)
-        Encoded_AA = encode_CT(Pad_Length, AA_dataset)
+        Encoded_AA = self.encode_CT(Pad_Length, AA_dataset)
         with open('Dataset/Encoded_Backbone_Seq.pkl', 'wb') as file:
             pickle.dump(Encoded_AA, file)
     # ========================================= #

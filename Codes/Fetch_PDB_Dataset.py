@@ -1,4 +1,8 @@
-""" ########## Processing C-alpha files ########## """
+"""
+Author: Farzan Soleymani
+Date: Dec 01-2023
+"""
+""" ########## Fetch protein datasets from PDB databse ########## """
 import os
 import wget
 import requests
